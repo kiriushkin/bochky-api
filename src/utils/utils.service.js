@@ -3,16 +3,16 @@ import db from '../db.js';
 
 const { AMO_API_DOMAIN, AMO_SECRET, AMO_ID, AMO_REDIRECT_URI } = process.env;
 
-class AuthService {
-  getNewTokens = async (code) => {
+class UtilsService {
+  refreshTokens = async (refreshToken) => {
     try {
       const { data } = await axios.post(
         `${AMO_API_DOMAIN}/oauth2/access_token`,
         {
           client_id: AMO_ID,
           client_secret: AMO_SECRET,
-          grant_type: 'authorization_code',
-          code,
+          grant_type: 'refresh_token',
+          refresh_token: refreshToken,
           redirect_uri: AMO_REDIRECT_URI,
         }
       );
@@ -26,4 +26,4 @@ class AuthService {
   };
 }
 
-export default new AuthService();
+export default new UtilsService();
