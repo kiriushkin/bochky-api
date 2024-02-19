@@ -16,6 +16,9 @@ const {
   AMO_CALLBACK_TIME_FIELD_ID,
   AMO_UTM_CAMPAIGN_FIELD_ID,
   AMO_UTM_TERM_FIELD_ID,
+  TELEGRAM_BOT_URL,
+  TELEGRAM_CHAT_ID,
+  TELEGRAM_MESSAGE_THREAD,
 } = process.env;
 class LeadsService {
   sendLead = async ({
@@ -26,6 +29,7 @@ class LeadsService {
     callback_time,
     utm_campaign,
     utm_term,
+    telegram_message,
   }) => {
     try {
       const token = await db.getData('/auth/access_token');
@@ -153,20 +157,30 @@ class LeadsService {
           ],
         });
 
-      const { data: leadsData } = await axios.post(
-        `${AMO_API_DOMAIN}/api/v4/leads`,
-        leadData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.post(`${AMO_API_DOMAIN}/api/v4/leads`, leadData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      return { data: leadsData, status: 'ok' };
+      telegram_message
+        ? await axios.post(
+            `${TELEGRAM_BOT_URL}/sendMessage`,
+            {},
+            {
+              params: {
+                chat_id: TELEGRAM_CHAT_ID,
+                message_thread_id: TELEGRAM_MESSAGE_THREAD,
+                text: telegram_message,
+                parse_mode: 'MarkdownV2',
+              },
+            }
+          )
+        : null;
+
+      return { status: 'ok' };
     } catch (error) {
       console.error(error.message);
-      console.error(error?.response?.data['validation-errors'][0].errors);
 
       if (error?.response?.data?.status === 401) {
         return {
