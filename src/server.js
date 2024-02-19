@@ -33,5 +33,6 @@ if (NODE_ENV === 'production') {
 if (NODE_ENV === 'development') {
   const httpServer = http.createServer(app);
   httpServer.listen(PORT);
-  console.log('Server running on port ' + PORT);
 }
+
+console.log('Server running on port ' + PORT);
