@@ -14,8 +14,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-if (NODE_ENV === 'production') app.use(cors({ origin: CLIENT_URL }));
-if (NODE_ENV === 'development') app.use(cors({ origin: '*' }));
+app.use(cors({ origin: CLIENT_URL ?? '*' }));
 
 app.use('/api', routes);
 
