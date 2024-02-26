@@ -22,6 +22,14 @@ class UtilsService {
       return true;
     } catch (error) {
       console.error(error);
+
+      if (error instanceof DataError || error instanceof DatabaseError)
+        return { status: 'DB Error', error };
+
+      if (error.response)
+        return { status: 'Axios Error', error: error.response.data };
+
+      return { status: 'Unkown Error', error: error };
     }
   };
 }

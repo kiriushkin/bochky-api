@@ -17,12 +17,13 @@ class LeadsControllers {
           return res.status(500).send('Server cannot authorize.');
       }
 
-      if (result.status === 500)
-        return res.status(500).send('Something went wrong.');
+      if (result.status !== 'ok') return res.status(500).send(result);
 
       res.send(result);
     } catch (error) {
       console.error(error);
+
+      res.status(500).send(error);
     }
   };
 }

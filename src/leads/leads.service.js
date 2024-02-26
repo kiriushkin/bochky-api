@@ -1,5 +1,6 @@
 import axios from 'axios';
 import db from '../db.js';
+import { DataError, DatabaseError } from 'node-json-db';
 
 const {
   AMO_API_DOMAIN,
@@ -182,14 +183,21 @@ class LeadsService {
     } catch (error) {
       console.error(error.message);
 
-      if (error?.response?.data?.status === 401) {
-        return {
-          status: 401,
-          refreshToken: await db.getData('/auth/refresh_token'),
-        };
+      if (error instanceof DataError || error instanceof DatabaseError)
+        return { status: 'DB Error', error: error };
+
+      if (error.response) {
+        if (error.response.data?.status === 401) {
+          return {
+            status: 401,
+            refreshToken: await db.getData('/auth/refresh_token'),
+          };
+        }
+
+        return { status: 'Axios Error', error: error.response.data };
       }
 
-      return { status: 500 };
+      return { status: 'Unkown Error', error: error };
     }
   };
 }
