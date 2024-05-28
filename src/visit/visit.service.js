@@ -7,20 +7,18 @@ const { TELEGRAM_BOT_URL, TELEGRAM_CHAT_ID, TELEGRAM_MESSAGE_THREAD } =
 class VisitService {
   sendVisit = async ({ text }) => {
     try {
-      telegram_message
-        ? await axios.post(
-            `${TELEGRAM_BOT_URL}/sendMessage`,
-            {},
-            {
-              params: {
-                chat_id: TELEGRAM_CHAT_ID,
-                message_thread_id: TELEGRAM_MESSAGE_THREAD,
-                text,
-                parse_mode: 'HTML',
-              },
-            }
-          )
-        : null;
+      await axios.post(
+        `${TELEGRAM_BOT_URL}/sendMessage`,
+        {},
+        {
+          params: {
+            chat_id: TELEGRAM_CHAT_ID,
+            message_thread_id: TELEGRAM_MESSAGE_THREAD,
+            text,
+            parse_mode: 'HTML',
+          },
+        }
+      );
 
       return { status: 'ok' };
     } catch (error) {
