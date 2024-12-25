@@ -7,14 +7,25 @@ import http from 'http';
 import https from 'https';
 import routes from './routes.js';
 
-const { NODE_ENV, CLIENT_URL, SSL_PATH, PORT } = process.env;
+const { NODE_ENV, CLIENT_URL, CLIENT_URL_TEST, SSL_PATH, PORT } = process.env;
+
+const whitelist = [CLIENT_URL, CLIENT_URL_TEST];
+const corsOpts = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors({ origin: CLIENT_URL || '*' }));
+app.use(cors(CLIENT_URL ? corsOpts : { origin: '*' }));
 
 app.use('/api', routes);
 
