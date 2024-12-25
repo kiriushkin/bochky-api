@@ -1,5 +1,5 @@
 import axios from 'axios';
-import db from '../db.js';
+import db from '../../db.js';
 import { DataError, DatabaseError } from 'node-json-db';
 
 const { TELEGRAM_BOT_URL, TELEGRAM_CHAT_ID, TELEGRAM_MESSAGE_THREAD } =

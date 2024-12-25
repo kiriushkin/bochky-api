@@ -1,5 +1,5 @@
 import visitService from './visit.service.js';
-import utilsService from '../utils/utils.service.js';
+import utilsService from '../../utils/utils.service.js';
 
 class VisitControllers {
   sendVisit = async (req, res) => {

@@ -1,5 +1,5 @@
 import leadsService from './leads.service.js';
-import utilsService from '../utils/utils.service.js';
+import utilsService from '../../utils/utils.service.js';
 
 class LeadsControllers {
   sendLead = async (req, res) => {

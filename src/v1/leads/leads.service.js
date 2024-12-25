@@ -1,5 +1,5 @@
 import axios from 'axios';
-import db from '../db.js';
+import db from '../../db.js';
 import { DataError, DatabaseError } from 'node-json-db';
 
 const {
