@@ -1,6 +1,7 @@
 import axios from 'axios';
 import db from '../../db.js';
 import { DataError, DatabaseError } from 'node-json-db';
+import { logger } from '../../logger.js';
 
 const {
   LOGS,
@@ -30,9 +31,11 @@ class LeadsService {
 
       await this.sendTelegram(telegram_message);
 
+      logger.info('Success', props);
+
       return { status: 'ok' };
     } catch (error) {
-      console.error(error.message);
+      logger.error(error.message, error);
       if (Boolean(LOGS)) {
         if (error.response) {
           console.log(error.response.data);
@@ -42,8 +45,10 @@ class LeadsService {
         }
       }
 
-      if (error instanceof DataError || error instanceof DatabaseError)
+      if (error instanceof DataError || error instanceof DatabaseError) {
+        logger.error(error);
         return { status: 'DB Error', error: error };
+      }
 
       if (error.response) {
         if (error.response.data?.status === 401) {
@@ -56,6 +61,7 @@ class LeadsService {
         return { status: 'Axios Error', error: error.response.data };
       }
 
+      logger.error(error);
       return { status: 'Unkown Error', error: error };
     }
   };
