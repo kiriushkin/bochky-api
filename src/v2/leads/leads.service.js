@@ -78,6 +78,7 @@ class LeadsService {
     utm_term,
     utm_source,
   }) => {
+    logger.info('Getting token');
     const token = await db.getData('/auth/access_token');
 
     const { data: contactsData } = await axios.get(
@@ -96,6 +97,7 @@ class LeadsService {
 
     if (contactsData) contactId = contactsData._embedded.contacts[0].id;
     else {
+      logger.info('Creating contact');
       const { data } = await axios.post(
         `${AMO_API_DOMAIN}/api/v4/contacts`,
         [
@@ -246,6 +248,7 @@ class LeadsService {
       });
     }
 
+    logger.info('Sending lead to the CRM');
     await axios.post(`${AMO_API_DOMAIN}/api/v4/leads`, leadData, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -254,6 +257,7 @@ class LeadsService {
   };
 
   sendTelegram = async (telegram_message) => {
+    logger.info('Sending lead to Telegram');
     telegram_message
       ? await axios.post(
           `${TELEGRAM_BOT_URL}/sendMessage`,
