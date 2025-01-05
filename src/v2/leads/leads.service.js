@@ -35,7 +35,7 @@ class LeadsService {
 
       return { status: 'ok' };
     } catch (error) {
-      logger.error(error.message, error);
+      logger.error(error.message, { meta: error });
       if (Boolean(LOGS)) {
         if (error.response) {
           console.log(error.response.data);
@@ -46,7 +46,7 @@ class LeadsService {
       }
 
       if (error instanceof DataError || error instanceof DatabaseError) {
-        logger.error(error);
+        logger.error('DB Error', { meta: error });
         return { status: 'DB Error', error: error };
       }
 
@@ -61,7 +61,7 @@ class LeadsService {
         return { status: 'Axios Error', error: error.response.data };
       }
 
-      logger.error(error);
+      logger.error('Unknown Error', { meta: error });
       return { status: 'Unkown Error', error: error };
     }
   };
