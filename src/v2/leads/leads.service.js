@@ -19,7 +19,7 @@ const {
   V2_AMO_FEEDBACK_TYPE_FIELD_ID,
   V2_AMO_CAMPAIGN_FIELD_ID,
   V2_AMO_TERM_FIELD_ID,
-  V2_AMO_UTM_SOURCE_FIELD_ID,
+  V2_AMO_UTM_CONTENT_FIELD_ID,
   TELEGRAM_BOT_URL,
   TELEGRAM_CHAT_ID,
   TELEGRAM_MESSAGE_THREAD,
@@ -77,6 +77,7 @@ class LeadsService {
     utm_campaign,
     utm_term,
     utm_source,
+    utm_content,
   }) => {
     logger.info('Getting token');
     const token = await db.getData('/auth/access_token');
@@ -236,13 +237,13 @@ class LeadsService {
       });
     }
 
-    // utm_source
-    if (utm_source) {
+    // utm_content
+    if (utm_content) {
       leadData[0].custom_fields_values.push({
-        field_id: +V2_AMO_UTM_SOURCE_FIELD_ID,
+        field_id: +V2_AMO_UTM_CONTENT_FIELD_ID,
         values: [
           {
-            value: utm_source,
+            value: utm_content,
           },
         ],
       });
