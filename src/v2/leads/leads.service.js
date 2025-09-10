@@ -27,7 +27,7 @@ const {
 class LeadsService {
   sendLead = async ({ telegram_message, ...props }) => {
     try {
-      await this.sendCRM(props);
+      // await this.sendCRM(props);
 
       await this.sendTelegram(telegram_message);
 
@@ -266,7 +266,7 @@ class LeadsService {
           {
             params: {
               chat_id: TELEGRAM_CHAT_ID,
-              message_thread_id: TELEGRAM_MESSAGE_THREAD,
+              // message_thread_id: TELEGRAM_MESSAGE_THREAD,
               text: telegram_message,
               parse_mode: 'MarkdownV2',
             },
